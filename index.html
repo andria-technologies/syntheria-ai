@@ -12,8 +12,8 @@
             theme: {
                 extend: {
                     colors: {
-                        darkbase: '#030712',
-                        cardglass: 'rgba(15, 23, 42, 0.6)',
+                        darkbase: '#020408',
+                        cardglass: 'rgba(10, 15, 30, 0.75)',
                         neoncyan: '#06b6d4',
                         neonmagenta: '#ec4899'
                     }
@@ -23,11 +23,11 @@
     </script>
     <style>
         .glass-card {
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(6, 182, 212, 0.2);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            background: rgba(10, 15, 30, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15);
             transform-style: preserve-3d;
             transition: transform 0.1s ease-out;
         }
@@ -38,35 +38,38 @@
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            pointer-events: none;
         }
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.8; }
+        @keyframes cyberGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
         }
-        .glow-effect {
-            animation: pulseGlow 4s infinite ease-in-out;
+        .ambient-glow {
+            animation: cyberGlow 6s infinite ease-in-out;
         }
     </style>
 </head>
 <body class="bg-darkbase text-slate-100 min-h-screen font-sans antialiased overflow-x-hidden flex flex-col">
 
-    <!-- 3D Interactive Background Canvas -->
+    <!-- 3D Cyber Wave Background Canvas -->
     <canvas id="bg-canvas"></canvas>
 
+    <!-- Ambient Lighting Blobs -->
+    <div class="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none ambient-glow"></div>
+    <div class="fixed bottom-10 right-10 w-80 h-80 bg-magenta-500/10 rounded-full blur-[120px] pointer-events-none ambient-glow" style="animation-delay: 3s;"></div>
+
     <!-- Top Navigation Bar -->
-    <header class="border-b border-cyan-500/10 bg-darkbase/70 backdrop-blur-xl sticky top-0 z-50">
+    <header class="border-b border-cyan-500/15 bg-darkbase/80 backdrop-blur-2xl sticky top-0 z-50">
         <div class="max-w-4xl mx-auto px-4 py-3.5 flex justify-between items-center">
-            <div class="flex items-center space-x-2.5">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-magenta-500 flex items-center justify-center font-black text-white shadow-lg shadow-cyan-500/40 text-base">S</div>
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-magenta-500 flex items-center justify-center font-black text-white shadow-xl shadow-cyan-500/50 text-lg border border-cyan-400/30">S</div>
                 <div>
-                    <span class="text-base font-black tracking-wider bg-gradient-to-r from-cyan-400 via-teal-200 to-magenta-500 bg-clip-text text-transparent">SYNTHERIA</span>
-                    <span class="text-[10px] block font-mono text-cyan-400 tracking-widest uppercase">AI Studio v2.0</span>
+                    <span class="text-base font-black tracking-widest bg-gradient-to-r from-cyan-300 via-teal-200 to-magenta-400 bg-clip-text text-transparent">SYNTHERIA</span>
+                    <span class="text-[10px] block font-mono text-cyan-400 tracking-widest uppercase">Neural Studio 3D</span>
                 </div>
             </div>
             
             <div class="flex items-center space-x-3">
-                <select id="langSelector" onchange="changeLanguage(this.value)" class="bg-slate-900/90 border border-cyan-500/30 text-cyan-300 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-cyan-400 font-medium">
+                <select id="langSelector" onchange="changeLanguage(this.value)" class="bg-slate-900/90 border border-cyan-500/40 text-cyan-300 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-400 font-bold shadow-lg">
                     <option value="id" selected>🇮🇩 ID</option>
                     <option value="en">🇬🇧 EN</option>
                     <option value="zh">🇨🇳 中文</option>
@@ -76,45 +79,41 @@
         </div>
     </header>
 
-    <!-- Main Dynamic Container -->
+    <!-- Main Container -->
     <main class="flex-1 max-w-4xl w-full mx-auto p-4 pb-24 flex flex-col justify-center">
         
-        <!-- Tab Navigation Switcher -->
-        <div class="flex p-1 bg-slate-900/80 border border-slate-800 rounded-2xl mb-6 backdrop-blur">
-            <button onclick="switchTab('studio')" id="tab-studio" class="flex-1 py-2.5 text-xs font-bold rounded-xl bg-gradient-to-r from-cyan-500/20 to-teal-500/10 text-cyan-300 border border-cyan-500/30 transition shadow-inner">🎙️ Neural Studio</button>
-            <button onclick="switchTab('assistant')" id="tab-assistant" class="flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition">🤖 Twin Assistant</button>
+        <!-- Tab Switcher -->
+        <div class="flex p-1.5 bg-slate-900/90 border border-slate-800 rounded-2xl mb-6 backdrop-blur-xl shadow-2xl">
+            <button onclick="switchTab('studio')" id="tab-studio" class="flex-1 py-3 text-xs font-black rounded-xl bg-gradient-to-r from-cyan-500/20 to-teal-500/10 text-cyan-300 border border-cyan-500/40 transition shadow-inner">🎙️ Neural Studio</button>
+            <button onclick="switchTab('assistant')" id="tab-assistant" class="flex-1 py-3 text-xs font-black rounded-xl text-slate-400 hover:text-white transition">🤖 Twin Assistant</button>
         </div>
 
-        <!-- TAB 1: STUDIO (3D Interactive Tilt Card) -->
+        <!-- TAB 1: STUDIO (3D Tilt Card) -->
         <section id="panel-studio" class="space-y-6">
-            <div id="tiltCard" class="glass-card rounded-3xl p-6 relative overflow-hidden">
-                <!-- Background ambient glow -->
-                <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl glow-effect"></div>
-                <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-magenta-500/20 rounded-full blur-3xl glow-effect"></div>
-
+            <div id="tiltCard" class="glass-card rounded-3xl p-6 md:p-8 relative overflow-hidden">
                 <div class="relative z-10">
-                    <h2 id="txt-title" class="text-xl font-extrabold text-white mb-1 flex items-center gap-2">
+                    <h2 id="txt-title" class="text-xl md:text-2xl font-black text-white mb-1 flex items-center gap-2.5">
                         <span>Digital Twin Studio</span>
-                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Live 3D</span>
+                        <span class="text-[10px] px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-mono tracking-wider">3D INTERACTIVE</span>
                     </h2>
-                    <p id="txt-desc" class="text-xs text-slate-400 mb-6">Unggah foto potret dan sampel suara Anda untuk merender video avatar sinematik beresolusi tinggi.</p>
+                    <p id="txt-desc" class="text-xs md:text-sm text-slate-300 mb-6 font-medium">Unggah foto potret dan sampel suara Anda untuk merender video avatar sinematik beresolusi tinggi secara mandiri.</p>
                     
-                    <div class="space-y-4">
+                    <div class="space-y-5">
                         <!-- Upload Box -->
-                        <div class="border-2 border-dashed border-cyan-500/30 hover:border-cyan-400 rounded-2xl p-4 text-center bg-slate-950/40 transition cursor-pointer relative">
-                            <input type="file" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
-                            <div class="text-cyan-400 text-xs font-semibold mb-1">📸 Ketuk atau Seret Foto Wajah Anda Di Sini</div>
-                            <p class="text-[10px] text-slate-500">Mendukung format PNG, JPG (Rekomendasi HD)</p>
+                        <div class="border-2 border-dashed border-cyan-500/40 hover:border-cyan-400 rounded-2xl p-5 text-center bg-slate-950/60 transition cursor-pointer relative group">
+                            <input type="file" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-20" />
+                            <div class="text-cyan-300 text-xs md:text-sm font-bold mb-1 group-hover:text-cyan-200 transition">📸 Ketuk atau Seret Foto Wajah Anda Di Sini</div>
+                            <p class="text-[10px] text-slate-400">Mendukung format PNG, JPG (Rekomendasi Kualitas HD)</p>
                         </div>
 
                         <!-- Textarea Script -->
                         <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Naskah Suara & Gerakan Bibir</label>
-                            <textarea rows="3" class="w-full bg-slate-950/60 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-400 transition shadow-inner" placeholder="Tuliskan naskah yang akan diucapkan avatar Anda..."></textarea>
+                            <label class="block text-xs font-bold text-slate-200 mb-2">Naskah Suara & Gerakan Bibir</label>
+                            <textarea rows="3" class="w-full bg-slate-950/80 border border-slate-800 rounded-2xl p-4 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-cyan-400 transition shadow-inner font-medium" placeholder="Tuliskan naskah yang akan diucapkan avatar Anda..."></textarea>
                         </div>
 
                         <!-- Action Button -->
-                        <button class="w-full py-3.5 bg-gradient-to-r from-cyan-500 via-teal-500 to-magenta-600 text-white font-black rounded-2xl text-xs tracking-wider uppercase shadow-xl shadow-cyan-500/20 hover:opacity-95 transition transform active:scale-[0.98]">
+                        <button class="w-full py-4 bg-gradient-to-r from-cyan-500 via-teal-500 to-magenta-600 text-white font-black rounded-2xl text-xs md:text-sm tracking-widest uppercase shadow-xl shadow-cyan-500/30 hover:opacity-95 transition transform active:scale-[0.98]">
                             Mulai Render Syntheria 3D ✨
                         </button>
                     </div>
@@ -124,79 +123,93 @@
 
         <!-- TAB 2: AI ASSISTANT -->
         <section id="panel-assistant" class="hidden space-y-4">
-            <div class="glass-card rounded-3xl p-5 h-[62vh] flex flex-col justify-between">
-                <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                    <span class="text-xs font-bold text-magenta-400">Syntheria Intelligence Core</span>
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <div class="glass-card rounded-3xl p-6 h-[64vh] flex flex-col justify-between shadow-2xl">
+                <div class="flex items-center justify-between pb-3.5 border-b border-slate-800">
+                    <span class="text-xs font-black text-magenta-400 tracking-wider uppercase">Syntheria Intelligence Core</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
                 </div>
                 
-                <div id="chatBox" class="flex-1 overflow-y-auto space-y-3 pr-2 text-xs py-3">
-                    <div class="bg-slate-950/80 border border-slate-800 p-3.5 rounded-2xl max-w-[85%] text-slate-300 shadow-md">
+                <div id="chatBox" class="flex-1 overflow-y-auto space-y-3.5 pr-2 text-xs md:text-sm py-4">
+                    <div class="bg-slate-950/90 border border-slate-800 p-4 rounded-2xl max-w-[85%] text-slate-200 shadow-lg font-medium">
                         Halo! Saya sistem asisten digital twin Anda. Ada naskah atau strategi konten apa yang ingin kita optimalkan hari ini?
                     </div>
                 </div>
 
-                <div class="flex gap-2 pt-3 border-t border-slate-800">
-                    <input id="chatInput" type="text" placeholder="Tanyakan strategi atau buat skrip naskah..." class="flex-1 bg-slate-950/60 border border-slate-800 rounded-2xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-magenta-500 transition" />
-                    <button onclick="sendChatMessage()" class="bg-gradient-to-r from-magenta-600 to-pink-600 px-5 py-2.5 rounded-2xl text-xs font-bold text-white shadow-lg shadow-magenta-600/30">Kirim</button>
+                <div class="flex gap-2.5 pt-3.5 border-t border-slate-800">
+                    <input id="chatInput" type="text" placeholder="Tanyakan strategi atau buat skrip naskah..." class="flex-1 bg-slate-950/80 border border-slate-800 rounded-2xl px-4 py-3 text-xs md:text-sm text-slate-100 focus:outline-none focus:border-magenta-500 transition" />
+                    <button onclick="sendChatMessage()" class="bg-gradient-to-r from-magenta-600 to-pink-600 px-6 py-3 rounded-2xl text-xs md:text-sm font-black text-white shadow-lg shadow-magenta-600/40">Kirim</button>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Three.js Interactive Gyroscope / Mouse 3D Tilt Script -->
+    <!-- 3D Cyber Wave Mesh Background (Three.js) -->
     <script>
-        // 1. Three.js Background Particle & Light Stream
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 700;
-        const posArray = new Float32Array(particlesCount * 3);
-
-        for(let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 10;
-        }
-
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.015,
+        // Create 3D Cyber Wireframe Terrain Wave Mesh
+        const geometry = new THREE.PlaneGeometry(15, 15, 30, 30);
+        const material = new THREE.MeshBasicMaterial({
             color: 0x06b6d4,
+            wireframe: true,
             transparent: true,
-            opacity: 0.7
+            opacity: 0.22
         });
+        const waveMesh = new THREE.Mesh(geometry, material);
+        waveMesh.rotation.x = -Math.PI / 3;
+        waveMesh.position.y = -1.5;
+        scene.add(waveMesh);
 
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
-        camera.position.z = 3;
+        camera.position.z = 5;
 
-        // Mouse / Touch 3D interactivity
+        // Interactive touch/mouse movement reactive variables
         let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX / window.innerWidth) - 0.5;
-            mouseY = (event.clientY / window.innerHeight) - 0.5;
+        let targetX = 0, targetY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.002;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.002;
         });
 
-        // Mobile Device Orientation / Touch 3D tilt
-        window.addEventListener('deviceorientation', (event) => {
-            if(event.gamma) mouseX = event.gamma / 90;
-            if(event.beta) mouseY = event.beta / 180;
-        });
+        document.addEventListener('touchmove', (e) => {
+            if(e.touches.length > 0) {
+                mouseX = (e.touches[0].clientX - window.innerWidth / 2) * 0.003;
+                mouseY = (e.touches[0].clientY - window.innerHeight / 2) * 0.003;
+            }
+        }, { passive: true });
 
         const card = document.getElementById('tiltCard');
+        let clock = new THREE.Clock();
 
         function animate() {
             requestAnimationFrame(animate);
-            particlesMesh.rotation.y += 0.001;
-            particlesMesh.rotation.x += 0.0005;
+            let elapsedTime = clock.getElapsedTime();
 
-            // 3D card tilt effect responsive to mouse/touch
+            // Smooth interpolation for wave reaction
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+
+            // Animate wave vertices to create flowing fluid cyber motion
+            const positionAttribute = geometry.attributes.position;
+            for (let i = 0; i < positionAttribute.count; i++) {
+                let x = positionAttribute.getX(i);
+                let y = positionAttribute.getY(i);
+                let z = Math.sin(x + elapsedTime * 1.5) * Math.cos(y + elapsedTime * 1.5) * 0.4;
+                positionAttribute.setZ(i, z);
+            }
+            positionAttribute.needsUpdate = true;
+
+            waveMesh.rotation.z = targetX * 0.5;
+
+            // 3D Tilt Card effect
             if(card) {
-                card.style.transform = `perspective(1000px) rotateY(${mouseX * 15}deg) rotateX(${-mouseY * 15}deg)`;
+                card.style.transform = `perspective(1000px) rotateY(${targetX * 25}deg) rotateX(${-targetY * 25}deg)`;
             }
 
             renderer.render(scene, camera);
@@ -209,31 +222,31 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // 2. UI Localization & Tabs Handler
+        // Localization & Handlers
         const translations = {
-            id: { title: "Digital Twin Studio", desc: "Unggah foto potret dan sampel suara Anda untuk merender video avatar sinematik beresolusi tinggi." },
-            en: { title: "Digital Twin Studio", desc: "Upload your portrait photo and voice sample to render high-resolution cinematic avatar videos." },
-            zh: { title: "数字孪生工作室", desc: "上传您的肖像照片和声音样本，以渲染高清电影化身视频。" },
-            ja: { title: "デジタルツインスタジオ", desc: "ポートレート写真と音声サンプルをアップロードして、高解像度のシネマティックアバター動画をレンダリングします。" }
+            id: { title: "Digital Twin Studio", desc: "Unggah foto potret dan sampel suara Anda untuk merender video avatar sinematik beresolusi tinggi secara mandiri." },
+            en: { title: "Digital Twin Studio", desc: "Upload your portrait photo and voice sample to render high-resolution cinematic avatar videos independently." },
+            zh: { title: "数字孪生工作室", desc: "上传您的肖像照片和声音样本，以独立渲染高清电影化身视频。" },
+            ja: { title: "デジタルツインスタジオ", desc: "ポートレート写真と音声サンプルをアップロードして、高解像度のシネマティックアバター動画を自律的にレンダリングします。" }
         };
 
         function switchTab(tab) {
             if(tab === 'studio') {
                 document.getElementById('panel-studio').classList.remove('hidden');
                 document.getElementById('panel-assistant').classList.add('hidden');
-                document.getElementById('tab-studio').className = "flex-1 py-2.5 text-xs font-bold rounded-xl bg-gradient-to-r from-cyan-500/20 to-teal-500/10 text-cyan-300 border border-cyan-500/30 transition shadow-inner";
-                document.getElementById('tab-assistant').className = "flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition";
+                document.getElementById('tab-studio').className = "flex-1 py-3 text-xs font-black rounded-xl bg-gradient-to-r from-cyan-500/20 to-teal-500/10 text-cyan-300 border border-cyan-500/40 transition shadow-inner";
+                document.getElementById('tab-assistant').className = "flex-1 py-3 text-xs font-black rounded-xl text-slate-400 hover:text-white transition";
             } else {
                 document.getElementById('panel-studio').classList.add('hidden');
                 document.getElementById('panel-assistant').classList.remove('hidden');
-                document.getElementById('tab-assistant').className = "flex-1 py-2.5 text-xs font-bold rounded-xl bg-gradient-to-r from-magenta-500/20 to-pink-500/10 text-magenta-400 border border-magenta-500/30 transition shadow-inner";
-                document.getElementById('tab-studio').className = "flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-400 hover:text-white transition";
+                document.getElementById('tab-assistant').className = "flex-1 py-3 text-xs font-black rounded-xl bg-gradient-to-r from-magenta-500/20 to-pink-500/10 text-magenta-400 border border-magenta-500/40 transition shadow-inner";
+                document.getElementById('tab-studio').className = "flex-1 py-3 text-xs font-black rounded-xl text-slate-400 hover:text-white transition";
             }
         }
 
         function changeLanguage(lang) {
             const t = translations[lang] || translations['id'];
-            document.getElementById('txt-title').innerHTML = `<span>${t.title}</span> <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Live 3D</span>`;
+            document.getElementById('txt-title').innerHTML = `<span>${t.title}</span> <span class="text-[10px] px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-mono tracking-wider">3D INTERACTIVE</span>`;
             document.getElementById('txt-desc').innerText = t.desc;
         }
 
@@ -242,12 +255,12 @@
             const chatBox = document.getElementById('chatBox');
             if(!input.value.trim()) return;
             
-            chatBox.innerHTML += `<div class="bg-cyan-950/50 border border-cyan-500/30 p-3.5 rounded-2xl max-w-[85%] ml-auto text-cyan-200 shadow-md">${input.value}</div>`;
+            chatBox.innerHTML += `<div class="bg-cyan-950/70 border border-cyan-500/40 p-4 rounded-2xl max-w-[85%] ml-auto text-cyan-200 shadow-xl font-medium">${input.value}</div>`;
             const msg = input.value;
             input.value = '';
             
             setTimeout(() => {
-                chatBox.innerHTML += `<div class="bg-slate-950/80 border border-slate-800 p-3.5 rounded-2xl max-w-[85%] text-slate-300 shadow-md">Syntheria Core memproses: "${msg}". Menyiapkan parameter 3D avatar...</div>`;
+                chatBox.innerHTML += `<div class="bg-slate-950/90 border border-slate-800 p-4 rounded-2xl max-w-[85%] text-slate-200 shadow-xl font-medium">Syntheria Core memproses: "${msg}". Menyiapkan parameter matriks 3D...</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             }, 600);
         }
